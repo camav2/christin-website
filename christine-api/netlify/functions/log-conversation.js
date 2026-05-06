@@ -41,10 +41,6 @@ exports.handler = async (event) => {
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
   const AIRTABLE_TABLE = process.env.AIRTABLE_TABLE;
 
-  console.log("DEBUG base:", AIRTABLE_BASE_ID);
-  console.log("DEBUG table:", AIRTABLE_TABLE);
-  console.log("DEBUG key prefix:", AIRTABLE_API_KEY ? AIRTABLE_API_KEY.slice(0, 6) : "MISSING");
-
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
     console.error("Missing Airtable env vars");
     return { statusCode: 500, headers: corsHeaders, body: "" };
