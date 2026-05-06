@@ -81,14 +81,18 @@ exports.handler = async (event) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fields: {
-            "Session ID":  session_id,
-            "Role":        role,
-            "Message":     message.slice(0, 10000),
-            "Persona":     persona || "Unknown",
-            "Page URL":    page_url || "",
-            "Timestamp":   timestamp || new Date().toISOString(),
-          },
+          records: [
+            {
+              fields: {
+                "Session ID": session_id,
+                "Role":       role,
+                "Message":    message.slice(0, 10000),
+                "Persona":    persona || "Unknown",
+                "Page URL":   page_url || "",
+                "Timestamp":  timestamp || new Date().toISOString(),
+              },
+            },
+          ],
         }),
       }
     );
