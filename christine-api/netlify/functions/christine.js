@@ -10,7 +10,6 @@ const ALLOWED_ORIGINS = [
   "http://localhost",
   "http://localhost:3000",
   "http://127.0.0.1",
-  null, // file:// origin appears as null
 ];
 
 const SYSTEM_PROMPT = `You are Christine, the Community Book Coach for Write Now — a self-paced book writing program by the Expert Author Community (EAC) at expertauthor.community. You are warm, encouraging, direct, and knowledgeable. You speak like a trusted coach, not a chatbot.
@@ -42,9 +41,9 @@ exports.handler = async (event) => {
 
   // CORS headers — only allow expertauthor.community
   const corsHeaders = {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGINS.includes(null)
-      ? (origin || "*")
-      : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin)
+      ? origin
+      : "https://www.expertauthor.community",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };

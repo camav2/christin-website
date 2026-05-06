@@ -11,16 +11,15 @@ const ALLOWED_ORIGINS = [
   "http://localhost",
   "http://localhost:3000",
   "http://127.0.0.1",
-  null, // file:// origin appears as null
 ];
 
 exports.handler = async (event) => {
   const origin = event.headers.origin || "";
 
   const corsHeaders = {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGINS.includes(null)
-      ? (origin || "*")
-      : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin)
+      ? origin
+      : "https://www.expertauthor.community",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
@@ -33,12 +32,17 @@ exports.handler = async (event) => {
     return { statusCode: 405, headers: corsHeaders, body: "" };
   }
 
-  let payload;
+  // Declare env vars before use
+  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+  const AIRTABLE_TABLE = process.env.AIRTABLE_TABLE;
+
   if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
     console.error("Missing Airtable env vars");
     return { statusCode: 500, headers: corsHeaders, body: "" };
   }
 
+  let payload;
   try {
     payload = JSON.parse(event.body);
   } catch {
@@ -62,10 +66,6 @@ exports.handler = async (event) => {
       body: JSON.stringify({ error: "Missing required fields" }),
     };
   }
-
-  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const AIRTABLE_TABLE = process.env.AIRTABLE_TABLE;
 
   try {
     const response = await fetch(
