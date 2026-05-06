@@ -8,14 +8,18 @@
 const ALLOWED_ORIGINS = [
   "https://www.expertauthor.community",
   "https://expertauthor.community",
+  "http://localhost",
+  "http://localhost:3000",
+  "http://127.0.0.1",
+  null, // file:// origin appears as null
 ];
 
 exports.handler = async (event) => {
   const origin = event.headers.origin || "";
 
   const corsHeaders = {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin)
-      ? origin
+    "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin) || ALLOWED_ORIGINS.includes(null)
+      ? (origin || "*")
       : ALLOWED_ORIGINS[0],
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
