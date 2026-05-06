@@ -50,7 +50,11 @@ exports.handler = async (event) => {
 
   // Handle preflight
   if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers: corsHeaders, body: "" };
+    return {
+      statusCode: 200,
+      headers: { ...corsHeaders, "Access-Control-Max-Age": "86400" },
+      body: "",
+    };
   }
 
   // Only allow POST
